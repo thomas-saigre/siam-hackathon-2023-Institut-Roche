@@ -3,11 +3,23 @@ close all
 
 % The raw data
 
-% data = readtable('brca_mRNA_50patients.csv');
-data = readtable('Baynet\brca_mRNA_patients_BayNet_n20_deg2_eps0_seed_1.csv');
+data_1 = readtable('brca_mRNA_50patients.csv');
+data_2 = readtable('Baynet\brca_mRNA_patients_BayNet_n20_deg2_eps0_seed_1.csv');
+[ m_original, N_original ] = size(data_1);
+
+data_1 = table2cell(data_1);
+data_2 = table2cell(data_2);
+
+for i=[4,6,7,9,10]
+    for j=1:m_original
+        data_2{j,i} = num2str(data_2{j,i});
+    end
+end
+
+data = vertcat(data_1, data_2);
+
 % The dimensions of the table
 [ m, N ] = size(data);
-data = table2cell(data);
 
 % The result
 A = zeros(m,N);
@@ -57,10 +69,11 @@ end
 I = isnan(A);
 A(I) = -100;
 
-save brca_mRNA_patients_BayNet_n20_deg2_eps0_seed_1.mat A
+A_1 = A(m_original+1:end, :);
+save brca_mRNA_patients_BayNet_n20_deg2_eps0_seed_1.mat A_1
 
-
-
+A = A(1:m_original, :);
+save brca_mRNA_50patients A
 
 %%% HELPER FUNCTIONS
 function y = check_binary(cur, m)

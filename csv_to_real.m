@@ -25,7 +25,6 @@ for i=1:N
     else
         d = isequalString(cur, 'Low') | isequalString(cur, 'Moderate') | isequalString(cur, 'High');
         if(sum(d) > 0)
-            'Here'
             dd = isequalString(cur,'Low');
             A(dd,i) = 1;
             dd = isequalString(cur,'Moderate');
@@ -39,15 +38,15 @@ for i=1:N
             if( sum (d) > 0 )
                 A(~d,i) = str2double(cur(~d));
                 A(d,i) = min(A(:,i)) - 100;
-                if(sum(isNaN(A(:,i))) > 0)
-                    A(:,i) = label(cur);
+                if(sum(isnan(A(:,i))) > 0)
+                    A(:,i) = assign_labels(cur);
                 end
             else                
                 b = check_binary(cur,m);
                 if(b)
                     A(:,i) = assign_binary(cur);
                 else
-                    
+                    A(:,i) = assign_labels(cur);
                 end
             end
         end
@@ -60,7 +59,7 @@ function y = check_binary(cur, m)
     
     indices = 1:m;
     indices = indices(~label_1_m);
-    label_2 = cur{indices(1)};    
+    label_2 = cur{indices(1)};
     label_2_m = isequalString(cur, label_2);
     
     y = (sum(label_1_m) + sum(label_2_m)) == m;
@@ -85,5 +84,25 @@ function d = isequalString(cur,label)
     d = false( length(cur), 1);
     for i=1:length(d)        
         d(i) = isequal(cur{i},label);
+    end
+end
+
+function a = assign_labels(cur)    
+    m = length(cur);
+    a = zeros( m, 1);
+    i = 1;
+    assigned = a;
+    indices = 1:m;
+    
+    while(sum(assigned) < m)
+        label = cur{indices(1)};
+        label_m = isequalString(cur, label);
+        a(label_m) = i;
+        
+        i = i + 1;
+        
+        assigned = assigned | label_m;
+        indices = 1:m;
+        indices = indices(~assigned);
     end
 end

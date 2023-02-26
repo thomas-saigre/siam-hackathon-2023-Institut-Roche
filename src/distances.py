@@ -33,3 +33,32 @@ def computeM(df):
     mean = df.mean(axis=0)
     a_max = np.max(np.abs(df - mean), axis=0)
     return np.diag(a_max**2)
+
+
+
+def getDistances(df_true, df):
+
+    try:
+        Sig = np.linalg.inv(np.array(df.cov()))
+    except np.linalg.LinAlgError as err:
+        if 'Singular matrix' in str(err):
+            print("Singular matrix")
+            Sig = np.eye(df.shape[1])
+
+    abar = df.mean(axis=0)
+
+    M = computeM(df)
+    Mm1 = np.linalg.inv(M)
+
+    d1 = []
+    d2 = []
+    d_theta = [[], [], []]
+    for i in range(df.shape[0]):
+        d1_ = distance1(df_true.iloc[i], abar, Sig)
+        d2_ = distance2(df_true.iloc[i], abar, Mm1)
+        d1.append( d1_ )
+        d2.append( d2_ )
+        for i, theta in enumerate([0.25, 0.5, 0.75]):
+            d_theta[i].append( theta * d1_ + (1-theta) * d2_ )
+
+    return d1, d2, d_theta

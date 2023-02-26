@@ -5,6 +5,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{xcolor}
 \usepackage{bm}
 \usepackage{listings}
 \lstset{language=matlab, breaklines=true}
@@ -73,9 +74,14 @@ The last possible distance is a convex combination of $d_1, d_2$:
 
 The metric to measure how good the privatization is, we may use:
 \begin{equation}
-	M(A, A^1) = \sum_{i=1}^{m} d(a^1, \bar{a}^1) (1 - \P(a_j | a_i^1) )
+	M(A, A^1) = \sum_{i=1}^{m} d(a^1, \bar{a}^1)^2 (1 - \P(a_j | a_i^1) )
 \end{equation}
 where $d$ is one of the distances above, and $\P(j | a_i^1)$ is a measure of the probability to recognize the that $i$ comes from the $j$-th row of $A$, assuming that $j$ is really the correct row. 
+\textbf{Alternatives}
+Probably a better function would be using the square of the probability term as well:
+\begin{equation}
+	M_{best}(A, A^1) = \sum_{i=1}^{m} d(a^1, \bar{a}^1)^2 (1 - \P(a_j | a_i^1) )^2
+\end{equation}
 
 \textbf{What we do}:
 \begin{itemize}
@@ -113,5 +119,11 @@ our probability is:
 \begin{equation}
 	P(a_j | a_i^1) = \max_j C_ij - \tilde{C}_i
 \end{equation}
+
+\textcolor{red}{\textbf{IMPORTANT}}: it is not clear whether this is a good way of computing the probability. PROBABLY NOT. (very high probability, every time.)
+
+\textbf{ALTERNATIVES}
+
+In practice, on the given dataset, $d_1$ worked better.
 
 \end{document}

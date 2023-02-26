@@ -36,6 +36,8 @@ def justOne():
 
 def allPop():
 
+    POPULATIONS = [50, 100, 200, 500, 1000, 1977]
+    n_pop = len(POPULATIONS)
 
     fig, ax = plt.subplots(1, n_pop, figsize=(n_pop*5, 5))
     for i, pop in enumerate(POPULATIONS):

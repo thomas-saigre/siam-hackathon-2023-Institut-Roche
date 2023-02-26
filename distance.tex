@@ -73,16 +73,16 @@ The last possible distance is a convex combination of $d_1, d_2$:
 
 The metric to measure how good the privatization is, we may use:
 \begin{equation}
-	M(A, A^\text{pub}) = \sum_{i=1}^{m} d(a, \bar{a}) \left(1 - \P(j| a_j^\text{pub}) \right)
+	M(A, A^1) = \sum_{i=1}^{m} d(a^1, \bar{a}^1) (1 - \P(a_j | a_i^1) )
 \end{equation}
-where $d$ is one of the distances above, and $\P(j | a_i^\text{pub})$ is a measure of the probability to recognize the that $i$ comes from the $j$-th row of $A$, assuming that $j$ is really the correct row. 
+where $d$ is one of the distances above, and $\P(j | a_i^1)$ is a measure of the probability to recognize the that $i$ comes from the $j$-th row of $A$, assuming that $j$ is really the correct row. 
 
 \textbf{What we do}:
 \begin{itemize}
-	\item If the matrix is the same, the measure $M(A, A) = 0$
-	\item If the matrix is the same and the masking is shuffling the rows, the measure $M(A, LA) = 0$ ($L$ is a permutation matrix)
+	\item If the matrix is the same, the measure $M(A, A) \approx 0$
+	\item If the matrix is the same and the masking is shuffling the rows, the measure $M(A, LA) \approx 0$ ($L$ is a permutation matrix)
 	\item We weight more the data that are further from the mean value.
-	\item The distance is computed from the original matrix $A$, because it is possible that the privatization moves the outliers very close to the mean, so we still want to consider the fact that they were outliers in the original collected data.
+	% \item The distance is computed from the original matrix $A$, because it is possible that the privatization moves the outliers very close to the mean, so we still want to consider the fact that they were outliers in the original collected data.
 	\item If there is a high probability to retrieve $j$ from $a_i^1$ for data near the average $\bar{a}$, we still weight it, since $(1 - \P(j| a_j^1) )$ will be close to $0$.
 \end{itemize}
 \textbf{What we expect}:
@@ -98,5 +98,20 @@ $M(A,A^1)$ close to $0 \implies $ the matrices are very similar, in the sense th
 
 In practice, there should be a trade off between data quality and $M(A,A^1)$.
 
+\textbf{Probability}
+
+$P(j | A^1)$ can be computed using the correlation.
+For every $a^1_i$, compute
+\begin{equation}
+	C_ij = \frac{(a_j - \bar{a})^\top (a^1_i - \bar{a}^1)}{\Vert (a_j - \bar{a})^\top (a^1_i - \bar{a}^1) \Vert}
+\end{equation}
+Exclude the maximum and compute the mean
+\begin{equation}
+	\tilde{C}_i = \frac{1}{m-1} (\sum_{j} C_ij - \max_j C_ij)
+\end{equation}
+our probability is:
+\begin{equation}
+	P(a_j | a_i^1) = \max_j C_ij - \tilde{C}_i
+\end{equation}
 
 \end{document}

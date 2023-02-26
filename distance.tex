@@ -80,7 +80,7 @@ where $d$ is one of the distances above, and $\P(j | a_i^1)$ is a measure of the
 \textbf{Alternatives}
 Probably a better function would be using the square of the probability term as well:
 \begin{equation}
-	M_{best}(A, A^1) = \sum_{i=1}^{m} d(a^1, \bar{a}^1)^2 (1 - \P(a_j | a_i^1) )^2
+	M_{best,d}(A, A^1) = \sum_{i=1}^{m} d(a^1, \bar{a}^1)^2 (1 - \P(a_j | a_i^1) )^2
 \end{equation}
 
 \textbf{What we do}:
@@ -125,5 +125,11 @@ our probability is:
 \textbf{ALTERNATIVES}
 
 In practice, on the given dataset, $d_1$ worked better.
+
+\textcolor{green}{\textbf{BEST FINDING}}: the following square measure is the one that works best:
+\begin{equation}
+	M_{best}(A, A^1) = \sum_{i=1}^{m} d_1(^1, \bar{a}^1)^2 (1 - \P(a_j | a_i^1) )^2
+\end{equation}
+where we square everything AND we use the $d_1$ distance.
 
 \end{document}

@@ -1,12 +1,12 @@
-function result = M_d_1(A, A1)
+function result = M(A, A1)
 
 [ m, n ] = size(A);
 a_mean = mean(A);
 a1_mean = mean(A1);
 
-Cov_A = (A - a_mean)'*(A - a_mean)/(m-1);
+max_A = max(A);
 
-M_max_1 = pinv(Cov_A);
+M_max_1 = diag(1./(max_A - a_mean));
 
 result = 0;
 for i=1:m
@@ -14,8 +14,9 @@ for i=1:m
     pp = probability(a_i, a1_mean, A, a_mean);
     if(pp >= 1)
         error()
-    end   
-    result = result + distance_2(a_i, a1_mean, M_max_1)*( 1 - pp );
+    end
+    
+    result = result + distance_2(a_i, a1_mean, M_max_1)*( 1 - pp )^2;
 end
 result/m;
 

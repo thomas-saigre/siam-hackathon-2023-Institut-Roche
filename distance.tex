@@ -8,18 +8,27 @@
 \usepackage{bm}
 \usepackage{listings}
 \lstset{language=matlab, breaklines=true}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 \usepackage{graphicx}
 \usepackage{placeins}
 
-\author{Alberto Bocchinfuso}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\P}{\mathbb{P}}
+
+\author{Alberto Bocchinfuso, Ginnie Renz, Thomas Saigre, Kevin Valencia}
 \title{Siam hackathon}
 
 \begin{document}
 	\maketitle
 
-\bigskip
-{\Large {\bf Distance function}}
-\bigskip
+
+\section{Notations}
+
+We have a dataset of $m$ individuals, with $N$ features each.
+We denote the dataset as $A \in \R^{m \times N}$, where each row is a feature vector of an individual.
+The mean value of the dataset, over features is denoted as $\bar{a} \in \R^N$, and the covariance matrix is denoted as $\Sigma \in \R^{N \times N}$.
+
+\section{Distance function}
 
 Given
 \begin{equation}
@@ -27,7 +36,7 @@ Given
 		a_1^\top \\
 		\vdots \\
 		a_m^\top
-	\end{bmatrix}
+	\end{bmatrix} \in \R^{m \times N}
 \end{equation}
 find a distance function
 \begin{equation}
@@ -35,16 +44,16 @@ find a distance function
 \end{equation}
 that weights how far $a_i$ is form $\bar{a}$, mean value of $A$, taking into consideration the covariance matrix $\Sigma$ and the vector of maximum differences
 \begin{equation}
-	a^{M}_j = \max_{i} \, \vert a_{i,j} - \bar{a}_j \vert \, .
+	a^{M}_j = \max_{i=1...m} \, \vert a_{i,j} - \bar{a}_j \vert \quad j=1...N .
 \end{equation}
 
 Possible distances are based on energy norms with respect to the covariance
 \begin{equation}
-	d_1(a, \bar{a})^2 = (a - \bar{a})^\top \Sigma^{-1} (a - \bar{a})
+	d_1(a, \bar{a})^2 = |a - \bar{a}|^\top \Sigma^{-1} |a - \bar{a}|
 \end{equation}
 or with respect to the square of the biggest difference:
 \begin{equation}
-	d_2(a, \bar{a})^2 = (a - \bar{a})^\top M^{-1} (a - \bar{a})
+	d_2(a, \bar{a})^2 = |a - \bar{a}|^\top M^{-1} |a - \bar{a}|
 \end{equation}
 with M:
 \begin{equation}
@@ -54,7 +63,7 @@ with M:
 	\vdots	&0	&\ddots	&	&0 \\
 	\vdots	&\vdots	&	&\ddots	&0 \\
 	0	&0	&0	&\dots	&\left[ a_N^M \right]^2
-\end{bmatrix} \, .
+\end{bmatrix} \in \R^{N\times N}.
 \end{equation}
 
 The last possible distance is a convex combination of $d_1, d_2$:
@@ -64,9 +73,9 @@ The last possible distance is a convex combination of $d_1, d_2$:
 
 The metric to measure how good the privatization is, we may use:
 \begin{equation}
-	M(A, A^1) = \sum_{i=1}^{m} d(a, \bar{a}) (1 - P(j| a_j^1) )
+	M(A, A^1) = \sum_{i=1}^{m} d(a, \bar{a}) (1 - \P(j| a_j^1) )
 \end{equation}
-where $d$ is one of the distances above, and $P(j | a_i^1)$ is a measure of the probability to recognize the that $i$ comes from the $j$-th row of $A$, assuming that $j$ is really the correct row. 
+where $d$ is one of the distances above, and $\P(j | a_i^1)$ is a measure of the probability to recognize the that $i$ comes from the $j$-th row of $A$, assuming that $j$ is really the correct row. 
 
 \textbf{What we do}:
 \begin{itemize}

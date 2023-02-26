@@ -20,12 +20,12 @@ def _distance2(df):
     return (df - mean).dot((df - mean).T) / a_max
 
 def distance1(a, abar, Sigm1):
-    diff = np.abs(np.array(a - abar))
+    diff = np.array(a - abar)
     return diff @ Sigm1 @ diff.T
 
 
 def distance2(a, abar, Mm1):
-    diff = np.abs(np.array(a - abar))
+    diff = np.array(a - abar)
     return diff @  Mm1 @ diff.T
 
 

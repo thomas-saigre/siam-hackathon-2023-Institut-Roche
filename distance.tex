@@ -83,11 +83,11 @@ where $d$ is one of the distances above, and $\P(j | a_i^1)$ is a measure of the
 	\item If the matrix is the same and the masking is shuffling the rows, the measure $M(A, LA) = 0$ ($L$ is a permutation matrix)
 	\item We weight more the data that are further from the mean value.
 	\item The distance is computed from the original matrix $A$, because it is possible that the privatization moves the outliers very close to the mean, so we still want to consider the fact that they were outliers in the original collected data.
-	\item If there is a moderate probability to retrieve $j$ from $a_i^1$ for data near the average $\bar{a}$, we don't weight it too much. A particle which is similar to $\bar{a}$ is probably confusing with many other particles.
+	\item If there is a high probability to retrieve $j$ from $a_i^1$ for data near the average $\bar{a}$, we still weight it, since $(1 - \P(j| a_j^1) )$ will be close to $0$.
 \end{itemize}
 \textbf{What we expect}:
 \begin{itemize}
-	\item $d_2$ works well in the presence of many outliers because it is not weighting them too much, since it considers the maximum difference and not just the standard deviation, which may lead to weight a lot the single outlier.
+	\item $d_2$ works well in the presence of many outliers because it is not weighting them too much, since it considers the maximum difference and not just the standard deviation, which may lead to weighting a lot the single outlier.
 \end{itemize}
 
 This metric shouldn't give too much advantage of the fact that a masking method masks the outliers very well since considers all the points and weights them both according to the distance from the mean (how peculiar that particle is in the dataset.), but also according to the probability of being recognized.

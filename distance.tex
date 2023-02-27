@@ -14,10 +14,11 @@
 \usepackage{placeins}
 
 \newcommand{\R}{\mathbb{R}}
-\renewcommand{\P}{\mathbb{P}}
+\renewcommand{\P}{P}
 
 \author{Alberto Bocchinfuso, Ginnie Renz, Thomas Saigre, Kevin Valencia}
 \title{Siam hackathon}
+\date{February 25 26, 2023}
 
 \begin{document}
 	\maketitle
@@ -83,7 +84,7 @@ Probably a better function would be using the square of the probability term as 
 	M_{best,d}(A, A^1) = \sum_{i=1}^{m} d(a^1, \bar{a}^1)^2 (1 - \P(a_j | a_i^1) )^2
 \end{equation}
 
-\textbf{What we do}:
+\noindent\textbf{What we do}:
 \begin{itemize}
 	\item If the matrix is the same, the measure $M(A, A) \approx 0$
 	\item If the matrix is the same and the masking is shuffling the rows, the measure $M(A, LA) \approx 0$ ($L$ is a permutation matrix)
@@ -91,7 +92,7 @@ Probably a better function would be using the square of the probability term as 
 	% \item The distance is computed from the original matrix $A$, because it is possible that the privatization moves the outliers very close to the mean, so we still want to consider the fact that they were outliers in the original collected data.
 	\item If there is a high probability to retrieve $j$ from $a_i^1$ for data near the average $\bar{a}$, we still weight it, since $(1 - \P(j| a_j^1) )$ will be close to $0$.
 \end{itemize}
-\textbf{What we expect}:
+\noindent\textbf{What we expect}:
 \begin{itemize}
 	\item $d_2$ works well in the presence of many outliers because it is not weighting them too much, since it considers the maximum difference and not just the standard deviation, which may lead to weighting a lot the single outlier.
 \end{itemize}
@@ -104,29 +105,29 @@ $M(A,A^1)$ close to $0 \implies $ the matrices are very similar, in the sense th
 
 In practice, there should be a trade off between data quality and $M(A,A^1)$.
 
-\textbf{Probability}
+\section{Probability}
 
 $P(j | A^1)$ can be computed using the correlation.
 For every $a^1_i$, compute
 \begin{equation}
-	C_ij = \frac{(a_j - \bar{a})^\top (a^1_i - \bar{a}^1)}{\Vert (a_j - \bar{a})^\top (a^1_i - \bar{a}^1) \Vert}
+	C_{ij} = \frac{(a_j - \bar{a})^\top (a^1_i - \bar{a}^1)}{\Vert (a_j - \bar{a})^\top (a^1_i - \bar{a}^1) \Vert}
 \end{equation}
 Exclude the maximum and compute the mean
 \begin{equation}
-	\tilde{C}_i = \frac{1}{m-1} (\sum_{j} C_ij - \max_j C_ij)
+	\tilde{C}_i = \frac{1}{m-1} \left(\sum_{j} C_{ij} - \max_j C_{ij}\right)
 \end{equation}
 our probability is:
 \begin{equation}
-	P(a_j | a_i^1) = \max_j C_ij - \tilde{C}_i
+	P(a_j | a_i^1) = \max_j C_{ij} - \tilde{C}_i
 \end{equation}
 
-\textcolor{red}{\textbf{IMPORTANT}}: it is not clear whether this is a good way of computing the probability. PROBABLY NOT. (very high probability, every time.)
+\noindent\textcolor{red}{\textbf{IMPORTANT}}: it is not clear whether this is a good way of computing the probability. PROBABLY NOT. (very high probability, every time.)
 
 \textbf{ALTERNATIVES}
 
 In practice, on the given dataset, $d_1$ worked better.
 
-\textcolor{green}{\textbf{BEST FINDING}}: the following square measure is the one that works best:
+\noindent\textcolor{green}{\textbf{BEST FINDING}}: the following square measure is the one that works best:
 \begin{equation}
 	M_{best}(A, A^1) = \sum_{i=1}^{m} d_1(^1, \bar{a}^1)^2 (1 - \P(a_j | a_i^1) )^2
 \end{equation}
